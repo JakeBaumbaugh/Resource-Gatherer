@@ -10,6 +10,7 @@ window.onload = function() {
     for(resource of resources) {
         resource.buildResourceDisplay();
         resource.buildMarketDisplay();
+        resource.buildBlacksmithDisplay();
     }
 }
 
@@ -32,7 +33,10 @@ function setupLinks() {
 }
 
 function updateMoney() {
-    document.getElementById("money-span").innerHTML = money;
+    let elem;
+    for(let i=0; (elem=document.getElementById("money-span-"+i)) != null; i++) {
+        elem.innerHTML = money;
+    }
 }
 
 function Resource(name, displayName, color) {
@@ -43,6 +47,10 @@ function Resource(name, displayName, color) {
     this.incr = 1;
     this.cap = 100;
     this.count = 0;
+
+    this.upgradeName = "axe"
+    this.upgradeDisplayName = "Axe"
+    this.upgradeCost = 10
 }
 Resource.prototype.buildResourceDisplay = function() {
     let sec = document.getElementById("resources");
@@ -85,7 +93,6 @@ Resource.prototype.buildMarketDisplay = function() {
 
     let resCont = document.createElement("div");
     resCont.id = this.name+"-market-container";
-    resCont.classList.add("resource-market-container");
 
     let num = document.createElement("p");
     num.innerHTML = this.displayName+": ";
@@ -114,6 +121,39 @@ Resource.prototype.buildMarketDisplay = function() {
 
     cont.appendChild(resCont);
 }
+Resource.prototype.buildBlacksmithDisplay = function() {
+    let cont = document.getElementById("blacksmith-container");
+
+    let resCont = document.createElement("div");
+    resCont.id = this.name+"-blacksmith-container";
+
+    let cost = document.createElement("p");
+    cost.innerHTML = "Upgrade "+this.upgradeDisplayName+": $";
+    let span = document.createElement("span");
+    span.id = this.name+"-upgrade-cost-span";
+    span.innerHTML = this.upgradeCost;
+    cost.appendChild(span);
+
+    let img = document.createElement("img");
+    img.src = "img/"+this.name+".png";
+
+    let buyOne = document.createElement("p");
+    buyOne.innerHTML = "Buy One";
+    buyOne.classList.add("clickable");
+    buyOne.onclick = this.buyOneUpgradeFunc.bind(this);
+
+    let buyAll = document.createElement("p");
+    buyAll.innerHTML = "Buy All";
+    buyAll.classList.add("clickable");
+    buyAll.onclick = this.buyAllUpgradeFunc.bind(this);
+
+    resCont.appendChild(cost);
+    resCont.appendChild(img);
+    resCont.appendChild(buyOne);
+    resCont.appendChild(buyAll);
+
+    cont.appendChild(resCont);
+}
 Resource.prototype.clickFunc = function() {
     this.count = Math.min(this.count+this.incr, this.cap);
     this.updateCount();
@@ -139,6 +179,20 @@ Resource.prototype.sellAllFunc = function() {
     this.updateCount();
     updateMoney();
 }
+Resource.prototype.buyOneUpgradeFunc = function() {
+    if(money >= this.upgradeCost) {
+        money -= this.upgradeCost;
+        this.upgradeCost += 2;
+        this.incr += 1;
+        updateMoney();
+        this.updateUpgradeCost();
+        return true;
+    }
+    return false;
+}
+Resource.prototype.buyAllUpgradeFunc = function() {
+    while(this.buyOneUpgradeFunc()) {}
+}
 Resource.prototype.updateCount = function() {
     // Update count spans
     let str = this.count+" / "+this.cap;
@@ -148,4 +202,7 @@ Resource.prototype.updateCount = function() {
     let stockpile = document.getElementById(this.name+"-stockpile");
     let contents = stockpile.getElementsByTagName("div")[0];
     contents.style.width = (100 * this.count / this.cap)+"%"
+}
+Resource.prototype.updateUpgradeCost = function() {
+    document.getElementById(this.name+"-upgrade-cost-span").innerHTML = this.upgradeCost;
 }

@@ -74,18 +74,18 @@ img {
     height: 100%;
 }
 
-#market-container {
+.shop-container {
     display: flex;
     justify-content: space-around;
 }
 
-#market-container > .resource-market-container {
+.shop-container > div {
     display: grid;
     grid-template-rows: 15% 55% 15% 15%;
     width: 20%;
     height: 25em;
 }
 
-#market-container > .resource-market-container > * {
+.shop-container > div > * {
     margin: auto;
 }
