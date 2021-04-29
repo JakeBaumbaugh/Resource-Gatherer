@@ -1,7 +1,7 @@
 var money = 0;
 var resources = [
-    new Resource("wood", "Wood", "#634F2E"),
-    new Resource("stone", "Stone", "#888888"),
+    new Resource("wood", "Wood", "#634F2E", "axe", "Axe"),
+    new Resource("stone", "Stone", "#888888", "pickaxe", "Pickaxe"),
 ];
 
 window.onload = function() {
@@ -39,7 +39,7 @@ function updateMoney() {
     }
 }
 
-function Resource(name, displayName, color) {
+function Resource(name, displayName, color, upgradeName, upgradeDisplayName) {
     this.name = name;
     this.displayName = displayName;
     this.color = color;
@@ -48,9 +48,9 @@ function Resource(name, displayName, color) {
     this.cap = 100;
     this.count = 0;
 
-    this.upgradeName = "axe"
-    this.upgradeDisplayName = "Axe"
-    this.upgradeCost = 10
+    this.upgradeName = upgradeName;
+    this.upgradeDisplayName = upgradeDisplayName;
+    this.upgradeCost = 10;
 }
 Resource.prototype.buildResourceDisplay = function() {
     let sec = document.getElementById("resources");
