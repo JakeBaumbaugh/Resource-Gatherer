@@ -11,6 +11,7 @@
 .clickable, nav > a {
     cursor: pointer;
     user-select: none;
+    font-weight: bold;
 }
 
 html {
@@ -27,7 +28,6 @@ nav {
 
 nav > a {
     padding: 0 3%;
-    font-weight: bold;
 }
 
 section {
@@ -88,4 +88,16 @@ img {
 
 .shop-container > div > * {
     margin: auto;
+}
+
+#prestige > h2 {
+    padding-bottom: 10px;
+}
+
+#prestige > h3 {
+    padding-bottom: 20px;
+}
+
+#prestige > p {
+    padding: 10px;
 }
